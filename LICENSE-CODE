@@ -23,7 +23,9 @@ SOFTWARE.
 ---
 
 This license applies to:
+- obtuse_hubris/ (installable Python package)
 - src/ (all source code: Python, Rust, Go, Prolog)
 - hooks/ (all git hook scripts and install.sh)
+- tests/ (test suite)
 
 Documentation (docs/, README.md, etc.) remains under CC BY 4.0 (see LICENSE).

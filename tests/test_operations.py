@@ -152,3 +152,43 @@ def test_force_push_properties():
     op = ForcePush()
     assert op.threat_level == ThreatLevel.CATASTROPHIC
     assert op.reversible is False
+
+
+def test_public_api_importable_from_root():
+    """All public names should be importable from obtuse_hubris directly."""
+    from obtuse_hubris import (
+        # consent
+        ConsentChallenge,
+        ConsentRequired,
+        ConsentExpired,
+        ConsentInvalid,
+        ConsentMismatch,
+        SafetyGate,
+        UserConsent,
+        # operations
+        DestructiveOperation,
+        FilterRepo,
+        ForcePush,
+        InstallHistoryRewritingTool,
+        Operation,
+        OperationDomain,
+        OperationResult,
+        ReEnableBranchProtection,
+        RemoveBranchProtection,
+        ResetHard,
+        SafeOperation,
+        ThreatLevel,
+        validate_consent,
+        # watchdog
+        Action,
+        ActionType,
+        Assessment,
+        CircuitBreaker,
+        RiskAssessor,
+        RiskLevel,
+        Verdict,
+        Watchdog,
+    )
+    # If we get here, all imports succeeded
+    assert SafetyGate is not None
+    assert Watchdog is not None

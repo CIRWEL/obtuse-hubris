@@ -171,6 +171,74 @@ If you use AI coding tools, read the **[Developer Guide](docs/developer-guide.md
 
 ---
 
+## Library
+
+The safety patterns in this report are also an installable Python package.
+
+### Install
+
+```bash
+pip install obtuse-hubris
+```
+
+### Usage
+
+```python
+from obtuse_hubris import SafetyGate, ForcePush
+
+gate = SafetyGate()
+op = ForcePush(remote="origin", branch="main")
+
+# This flow requires actual human input — the agent can't skip it
+consent = gate.request_consent(op)
+result = gate.execute_destructive(op, "/path/to/repo", consent)
+```
+
+### Custom operations
+
+Subclass `DestructiveOperation` for your own domain:
+
+```python
+from obtuse_hubris import DestructiveOperation, ThreatLevel, OperationDomain, UserConsent, OperationResult
+
+class DropTable(DestructiveOperation):
+    name = "drop_table"
+    threat_level = ThreatLevel.CATASTROPHIC
+    domain = OperationDomain.REMOTE
+    description = "Drop a database table and all its data."
+    reversible = False
+
+    def execute(self, table_name: str, consent: UserConsent) -> OperationResult:
+        # consent is validated by the gate before this is called
+        ...
+```
+
+### Watchdog
+
+Monitor agent behavior trajectories:
+
+```python
+from obtuse_hubris import Watchdog, Action, ActionType, Verdict
+
+watchdog = Watchdog()
+
+action = Action(
+    agent_id="my-agent",
+    action_type=ActionType.REWRITE_HISTORY,
+    target="main-repo",
+    description="Rewriting commit history",
+)
+
+assessment = watchdog.evaluate(action)
+if assessment.verdict == Verdict.KILL:
+    # terminate the agent session
+    ...
+```
+
+See [`src/`](src/) for full demonstrations.
+
+---
+
 ## Contributing
 
 If you've experienced a similar incident with an AI coding tool, see [CONTRIBUTING.md](CONTRIBUTING.md).
